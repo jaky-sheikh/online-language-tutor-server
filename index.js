@@ -27,6 +27,53 @@ async function run() {
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
+
+
+        // for stat crud operation
+        const db = client.db("online-Tutor");
+        const tutorsCollection = db.collection("tutors");
+        const reviewsCollection = db.collection("reviews");
+        const languagesCollection = db.collection("languages");
+        const usersCollection = db.collection("users");
+
+        // tutors crud
+        app.post('/tutors', async (req, res) => {
+            const result = await tutorsCollection.insertOne(req.body);
+            res.send(result);
+        })
+
+        app.get('/tutors', async (req, res) => {
+            const result = await tutorsCollection.find().toArray();
+            res.send(result);
+        })
+
+        app.put("/tutors/:id", async (req, res) => {
+            const id = req.params.id;
+            const updatedTutor = req.body;
+            const result = await tutorsCollection.updateOne(
+                { _id: new ObjectId(id) },
+                { $set: updatedTutor }
+            );
+            res.send(result);
+        });
+
+        app.delete("/tutors/:id", async (req, res) => {
+            const id = req.params.id;
+            const result = await tutorsCollection.deleteOne({ _id: new ObjectId(id) });
+            res.send(result);
+        });
+
+
+
+        // stats API
+        app.get("/stats", async (req, res) => {
+            const tutorCount = await tutorsCollection.countDocuments();
+
+
+            res.send({ tutorCount });
+        });
+
+
     } finally {
         // Ensures that the client will close when you finish/error
         // await client.close();
