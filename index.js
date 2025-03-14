@@ -63,14 +63,43 @@ async function run() {
             res.send(result);
         });
 
+        // reviews crud
+        app.post("/reviews", async (req, res) => {
+            const result = await reviewsCollection.insertOne(req.body);
+            res.send(result);
+        });
+
+        app.get("/reviews", async (req, res) => {
+            const result = await reviewsCollection.find().toArray();
+            res.send(result);
+        });
+
+        app.put("/reviews/:id", async (req, res) => {
+            const id = req.params.id;
+            const updatedReview = req.body;
+            const result = await reviewsCollection.updateOne(
+                { _id: new ObjectId(id) },
+                { $set: updatedReview }
+            );
+            res.send(result);
+        });
+
+        app.delete("/reviews/:id", async (req, res) => {
+            const id = req.params.id;
+            const result = await reviewsCollection.deleteOne({ _id: new ObjectId(id) });
+            res.send(result);
+        });
+
+
 
 
         // stats API
         app.get("/stats", async (req, res) => {
             const tutorCount = await tutorsCollection.countDocuments();
+            const reviewCount = await reviewsCollection.countDocuments();
 
 
-            res.send({ tutorCount });
+            res.send({ tutorCount, reviewCount });
         });
 
 
