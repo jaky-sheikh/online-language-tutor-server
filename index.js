@@ -90,16 +90,68 @@ async function run() {
             res.send(result);
         });
 
+        // languages crud
+        app.post("/languages", async (req, res) => {
+            const result = await languagesCollection.insertOne(req.body);
+            res.send(result);
+        });
 
+        app.get("/languages", async (req, res) => {
+            const result = await languagesCollection.find().toArray();
+            res.send(result);
+        });
 
+        app.put("/languages/:id", async (req, res) => {
+            const id = req.params.id;
+            const updatedLanguage = req.body;
+            const result = await languagesCollection.updateOne(
+                { _id: new ObjectId(id) },
+                { $set: updatedLanguage }
+            );
+            res.send(result);
+        });
+
+        app.delete("/languages/:id", async (req, res) => {
+            const id = req.params.id;
+            const result = await languagesCollection.deleteOne({ _id: new ObjectId(id) });
+            res.send(result);
+        });
+
+        // users crud
+        app.post("/users", async (req, res) => {
+            const result = await usersCollection.insertOne(req.body);
+            res.send(result);
+        });
+
+        app.get("/users", async (req, res) => {
+            const result = await usersCollection.find().toArray();
+            res.send(result);
+        });
+
+        app.put("/users/:id", async (req, res) => {
+            const id = req.params.id;
+            const updatedUser = req.body;
+            const result = await usersCollection.updateOne(
+                { _id: new ObjectId(id) },
+                { $set: updatedUser }
+            );
+            res.send(result);
+        });
+
+        app.delete("/users/:id", async (req, res) => {
+            const id = req.params.id;
+            const result = await usersCollection.deleteOne({ _id: new ObjectId(id) });
+            res.send(result);
+        });
 
         // stats API
         app.get("/stats", async (req, res) => {
             const tutorCount = await tutorsCollection.countDocuments();
             const reviewCount = await reviewsCollection.countDocuments();
+            const languageCount = await languagesCollection.countDocuments();
+            const userCount = await usersCollection.countDocuments();
 
-
-            res.send({ tutorCount, reviewCount });
+            res.send({ tutorCount, reviewCount, languageCount, userCount });
         });
 
 
