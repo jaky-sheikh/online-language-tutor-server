@@ -29,6 +29,16 @@ async function run() {
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
 
 
+        // language card collection
+        const lanCardCollection = client.db("online-Tutor").collection("lanCard");
+
+
+        // language card get operation
+        app.get('/lanCard', async (req, res) => {
+            const result = await lanCardCollection.find().toArray();
+            res.send(result);
+        })
+
         // for stat crud operation
         const db = client.db("online-Tutor");
         const tutorsCollection = db.collection("tutors");
