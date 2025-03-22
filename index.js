@@ -39,6 +39,13 @@ async function run() {
             res.send(result);
         })
 
+        // find tutor get api by category
+        app.get("/tutors/:category", async (req, res) => {
+            const category = req.params.category;
+            const result = await tutorsCollection.find({ language: category }).toArray();
+            res.send(result);
+        })
+
         // for stat crud operation
         const db = client.db("online-Tutor");
         const tutorsCollection = db.collection("tutors");
