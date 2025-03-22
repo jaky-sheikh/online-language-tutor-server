@@ -41,7 +41,7 @@ async function run() {
 
         // find tutor get api by category
         app.get("/tutors/:category", async (req, res) => {
-            const category = req.params.category;
+            const category = req.params.category.split(" ")[0];
             const result = await tutorsCollection.find({ language: category }).toArray();
             res.send(result);
         })
