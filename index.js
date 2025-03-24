@@ -32,6 +32,8 @@ async function run() {
         // language card collection
         const lanCardCollection = client.db("online-Tutor").collection("lanCard");
 
+        // Booked tutors collection
+        const bookedTutorsCollection = client.db("online-Tutor").collection("bookedTutors");
 
         // language card get operation
         app.get('/lanCard', async (req, res) => {
@@ -63,6 +65,13 @@ async function run() {
         app.post("/tutors", async (req, res) => {
             const newTutors = req.body;
             const result = await tutorsCollection.insertOne(newTutors);
+            res.send(result);
+        })
+
+        // booked-tutors post operation
+        app.post("/booked-tutors", async (req, res) => {
+            const bookedTutorInfo = req.body;
+            const result = await bookedTutorsCollection.insertOne(bookedTutorInfo);
             res.send(result);
         })
 
