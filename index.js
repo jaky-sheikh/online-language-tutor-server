@@ -46,6 +46,12 @@ async function run() {
             res.send(result);
         })
 
+        // tutors get operation
+        app.get("/tutors", async (req, res) => {
+            const result = await tutorsCollection.find().toArray();
+            res.send(result);
+        })
+
         // tutors post operation
         app.post("/tutors", async (req, res) => {
             const newTutors = req.body;
