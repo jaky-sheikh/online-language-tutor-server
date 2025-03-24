@@ -46,6 +46,13 @@ async function run() {
             res.send(result);
         })
 
+        // tutors post operation
+        app.post("/tutors", async (req, res) => {
+            const newTutors = req.body;
+            const result = await tutorsCollection.insertOne(newTutors);
+            res.send(result);
+        })
+
         // for stat crud operation
         const db = client.db("online-Tutor");
         const tutorsCollection = db.collection("tutors");
@@ -134,9 +141,10 @@ async function run() {
             res.send(result);
         });
 
-        // users crud
+        // users crud (Register)
         app.post("/users", async (req, res) => {
-            const result = await usersCollection.insertOne(req.body);
+            const newUser = req.body;
+            const result = await usersCollection.insertOne(newUser);
             res.send(result);
         });
 
@@ -145,21 +153,21 @@ async function run() {
             res.send(result);
         });
 
-        app.put("/users/:id", async (req, res) => {
-            const id = req.params.id;
-            const updatedUser = req.body;
-            const result = await usersCollection.updateOne(
-                { _id: new ObjectId(id) },
-                { $set: updatedUser }
-            );
-            res.send(result);
-        });
+        // app.put("/users/:id", async (req, res) => {
+        //     const id = req.params.id;
+        //     const updatedUser = req.body;
+        //     const result = await usersCollection.updateOne(
+        //         { _id: new ObjectId(id) },
+        //         { $set: updatedUser }
+        //     );
+        //     res.send(result);
+        // });
 
-        app.delete("/users/:id", async (req, res) => {
-            const id = req.params.id;
-            const result = await usersCollection.deleteOne({ _id: new ObjectId(id) });
-            res.send(result);
-        });
+        // app.delete("/users/:id", async (req, res) => {
+        //     const id = req.params.id;
+        //     const result = await usersCollection.deleteOne({ _id: new ObjectId(id) });
+        //     res.send(result);
+        // });
 
         // stats API
         app.get("/stats", async (req, res) => {
