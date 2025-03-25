@@ -69,7 +69,12 @@ async function run() {
         })
 
         // tutors get api for my-tutorial 
-
+        app.get("/tutors", async (req, res) => {
+            const email = req.query.email;
+            const query = { email: email };
+            const result = tutorsCollection.find(query).toArray();
+            res.send(result);
+        })
 
         // tutors post operation
         app.post("/tutors", async (req, res) => {
