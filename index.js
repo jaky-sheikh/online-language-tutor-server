@@ -49,17 +49,17 @@ async function run() {
         })
 
         // tutors get operation for all
-        // app.get("/tutors", async (req, res) => {
-        //     const result = await tutorsCollection.find().toArray();
-        //     res.send(result);
-        // })
+        app.get("/tutors", async (req, res) => {
+            const result = await tutorsCollection.find().toArray();
+            res.send(result);
+        })
 
         // Single tutor details fetch route get operation
-        // app.get("/tutor/:id", async (req, res) => {
-        //     const id = req.params.id;
-        //     const result = await tutorsCollection.findOne({ _id: new ObjectId(id) });
-        //     res.send(result);
-        // })
+        app.get("/tutor/:id", async (req, res) => {
+            const id = req.params.id;
+            const result = await tutorsCollection.findOne({ _id: new ObjectId(id) });
+            res.send(result);
+        })
 
         // My Booked Tutors Data Get API
         app.get("/booked-tutors", async (req, res) => {
@@ -69,15 +69,15 @@ async function run() {
         })
 
         // tutors get api for my-tutorial 
-        // app.get("/tutors", async (req, res) => {
-        //     const email = req.query.email;
-        //     let query = {};
-        //     if (email) {
-        //         query = { email: email };
-        //     }
-        //     const result = await tutorsCollection.find(query).toArray();
-        //     res.send(result);
-        // })
+        app.get("/tutors", async (req, res) => {
+            const email = req.query.email;
+            let query = {};
+            if (email) {
+                query = { email: email };
+            }
+            const result = await tutorsCollection.find(query).toArray();
+            res.send(result);
+        })
 
 
         // get api for update page(definite id)
@@ -89,22 +89,22 @@ async function run() {
         })
 
         // tutors get operation with optional search
-        app.get("/tutors", async (req, res) => {
-            const email = req.query.email;
-            const search = req.query.search;
-            let query = {};
+        // app.get("/tutors", async (req, res) => {
+        //     const email = req.query.email;
+        //     const search = req.query.search;
+        //     let query = {};
 
-            if (email) {
-                query.email = email;
-            }
+        //     if (email) {
+        //         query.email = email;
+        //     }
 
-            if (search) {
-                query.language = { $regex: search, $options: "i" };
-            }
+        //     if (search) {
+        //         query.language = { $regex: search, $options: "i" };
+        //     }
 
-            const result = await tutorsCollection.find(query).toArray();
-            res.send(result);
-        });
+        //     const result = await tutorsCollection.find(query).toArray();
+        //     res.send(result);
+        // });
 
 
         // delete api for update page
