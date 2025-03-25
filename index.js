@@ -68,6 +68,9 @@ async function run() {
             res.send(result);
         })
 
+        // tutors get api for my-tutorial 
+
+
         // tutors post operation
         app.post("/tutors", async (req, res) => {
             const newTutors = req.body;
@@ -79,6 +82,16 @@ async function run() {
         app.post("/booked-tutors", async (req, res) => {
             const bookedTutorInfo = req.body;
             const result = await bookedTutorsCollection.insertOne(bookedTutorInfo);
+            res.send(result);
+        })
+
+        // Review Count Update API (using $inc operator)
+        app.patch("/tutors/review/:id", async (req, res) => {
+            const id = req.params.id;
+            const result = await tutorsCollection.updateOne(
+                { _id: new ObjectId(id) },
+                { $inc: { review: 1 } }
+            );
             res.send(result);
         })
 
