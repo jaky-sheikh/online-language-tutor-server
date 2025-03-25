@@ -49,17 +49,17 @@ async function run() {
         })
 
         // tutors get operation for all
-        app.get("/tutors", async (req, res) => {
-            const result = await tutorsCollection.find().toArray();
-            res.send(result);
-        })
+        // app.get("/tutors", async (req, res) => {
+        //     const result = await tutorsCollection.find().toArray();
+        //     res.send(result);
+        // })
 
         // Single tutor details fetch route get operation
-        app.get("/tutor/:id", async (req, res) => {
-            const id = req.params.id;
-            const result = await tutorsCollection.findOne({ _id: new ObjectId(id) });
-            res.send(result);
-        })
+        // app.get("/tutor/:id", async (req, res) => {
+        //     const id = req.params.id;
+        //     const result = await tutorsCollection.findOne({ _id: new ObjectId(id) });
+        //     res.send(result);
+        // })
 
         // My Booked Tutors Data Get API
         app.get("/booked-tutors", async (req, res) => {
@@ -79,6 +79,7 @@ async function run() {
         //     res.send(result);
         // })
 
+
         // get api for update page(definite id)
         app.get("/tutors/:id", async (req, res) => {
             const id = req.params.id;
@@ -86,6 +87,25 @@ async function run() {
             const result = await tutorsCollection.findOne(query);
             res.send(result);
         })
+
+        // tutors get operation with optional search
+        app.get("/tutors", async (req, res) => {
+            const email = req.query.email;
+            const search = req.query.search;
+            let query = {};
+
+            if (email) {
+                query.email = email;
+            }
+
+            if (search) {
+                query.language = { $regex: search, $options: "i" };
+            }
+
+            const result = await tutorsCollection.find(query).toArray();
+            res.send(result);
+        });
+
 
         // delete api for update page
         app.delete("/tutors/:id", async (req, res) => {
