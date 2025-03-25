@@ -49,10 +49,10 @@ async function run() {
         })
 
         // tutors get operation for all
-        app.get("/tutors", async (req, res) => {
-            const result = await tutorsCollection.find().toArray();
-            res.send(result);
-        })
+        // app.get("/tutors", async (req, res) => {
+        //     const result = await tutorsCollection.find().toArray();
+        //     res.send(result);
+        // })
 
         // Single tutor details fetch route get operation
         app.get("/tutor/:id", async (req, res) => {
@@ -71,10 +71,22 @@ async function run() {
         // tutors get api for my-tutorial 
         app.get("/tutors", async (req, res) => {
             const email = req.query.email;
-            const query = { email: email };
-            const result = tutorsCollection.find(query).toArray();
+            let query = {};
+            if (email) {
+                query = { email: email };
+            }
+            const result = await tutorsCollection.find(query).toArray();
             res.send(result);
         })
+
+        // get api for update page(definite id)
+        app.get("/tutors/:id", async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await tutorsCollection.findOne(query);
+            res.send(result);
+        })
+
 
         // tutors post operation
         app.post("/tutors", async (req, res) => {
