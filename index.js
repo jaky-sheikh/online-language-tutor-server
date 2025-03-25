@@ -49,10 +49,10 @@ async function run() {
         })
 
         // tutors get operation for all
-        // app.get("/tutors", async (req, res) => {
-        //     const result = await tutorsCollection.find().toArray();
-        //     res.send(result);
-        // })
+        app.get("/tutors", async (req, res) => {
+            const result = await tutorsCollection.find().toArray();
+            res.send(result);
+        })
 
         // Single tutor details fetch route get operation
         app.get("/tutor/:id", async (req, res) => {
@@ -69,15 +69,15 @@ async function run() {
         })
 
         // tutors get api for my-tutorial 
-        app.get("/tutors", async (req, res) => {
-            const email = req.query.email;
-            let query = {};
-            if (email) {
-                query = { email: email };
-            }
-            const result = await tutorsCollection.find(query).toArray();
-            res.send(result);
-        })
+        // app.get("/tutors", async (req, res) => {
+        //     const email = req.query.email;
+        //     let query = {};
+        //     if (email) {
+        //         query = { email: email };
+        //     }
+        //     const result = await tutorsCollection.find(query).toArray();
+        //     res.send(result);
+        // })
 
         // get api for update page(definite id)
         app.get("/tutors/:id", async (req, res) => {
@@ -86,6 +86,33 @@ async function run() {
             const result = await tutorsCollection.findOne(query);
             res.send(result);
         })
+
+        // delete api for update page
+        app.delete("/tutors/:id", async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await tutorsCollection.deleteOne(query);
+            res.send(result);
+        })
+
+        // update api for update page
+        app.put('/tutors/:id', async (req, res) => {
+            const id = req.params.id;
+            const updatedData = req.body;
+
+            const filter = { _id: new ObjectId(id) };
+            const updateDoc = {
+                $set: {
+                    image: updatedData.image,
+                    language: updatedData.language,
+                    price: updatedData.price,
+                    details: updatedData.details,
+                },
+            };
+
+            const result = await tutorsCollection.updateOne(filter, updateDoc);
+            res.send(result);
+        });
 
 
         // tutors post operation
