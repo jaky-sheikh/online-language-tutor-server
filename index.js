@@ -61,6 +61,13 @@ async function run() {
             res.send(result);
         })
 
+        // My Booked Tutors Data Get API
+        app.get("/booked-tutors", async (req, res) => {
+            const email = req.query.email;
+            const result = await bookedTutorsCollection.find({ email }).toArray();
+            res.send(result);
+        })
+
         // tutors post operation
         app.post("/tutors", async (req, res) => {
             const newTutors = req.body;
