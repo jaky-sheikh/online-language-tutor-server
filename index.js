@@ -49,10 +49,10 @@ async function run() {
         })
 
         // tutors get operation for all
-        app.get("/tutors", async (req, res) => {
-            const result = await tutorsCollection.find().toArray();
-            res.send(result);
-        })
+        // app.get("/tutors", async (req, res) => {
+        //     const result = await tutorsCollection.find().toArray();
+        //     res.send(result);
+        // })
 
         // Single tutor details fetch route get operation
         app.get("/tutor/:id", async (req, res) => {
@@ -69,15 +69,15 @@ async function run() {
         })
 
         // tutors get api for my-tutorial 
-        app.get("/tutors", async (req, res) => {
-            const email = req.query.email;
-            let query = {};
-            if (email) {
-                query = { email: email };
-            }
-            const result = await tutorsCollection.find(query).toArray();
-            res.send(result);
-        })
+        // app.get("/tutors", async (req, res) => {
+        //     const email = req.query.email;
+        //     let query = {};
+        //     if (email) {
+        //         query = { email: email };
+        //     }
+        //     const result = await tutorsCollection.find(query).toArray();
+        //     res.send(result);
+        // })
 
 
         // get api for update page(definite id)
@@ -89,22 +89,22 @@ async function run() {
         })
 
         // tutors get operation with optional search
-        // app.get("/tutors", async (req, res) => {
-        //     const email = req.query.email;
-        //     const search = req.query.search;
-        //     let query = {};
+        app.get("/tutors", async (req, res) => {
+            const email = req.query.email;
+            const search = req.query.search;
+            let query = {};
 
-        //     if (email) {
-        //         query.email = email;
-        //     }
+            if (email) {
+                query.email = email;
+            }
 
-        //     if (search) {
-        //         query.language = { $regex: search, $options: "i" };
-        //     }
+            if (search) {
+                query.language = { $regex: search, $options: "i" };
+            }
 
-        //     const result = await tutorsCollection.find(query).toArray();
-        //     res.send(result);
-        // });
+            const result = await tutorsCollection.find(query).toArray();
+            res.send(result);
+        });
 
 
         // delete api for update page
@@ -134,7 +134,6 @@ async function run() {
             res.send(result);
         });
 
-
         // tutors post operation
         app.post("/tutors", async (req, res) => {
             const newTutors = req.body;
@@ -150,14 +149,44 @@ async function run() {
         })
 
         // Review Count Update API (using $inc operator)
-        app.patch("/tutors/review/:id", async (req, res) => {
+
+        // app.post("/add-review", async (req, res) => {
+        //     const reviewData = req.body;
+
+        //     try {
+        //         const reviewResult = await reviewsCollection.insertOne(reviewData);
+
+        //         const tutorUpdateResult = await tutorsCollection.updateOne(
+        //             { _id: new ObjectId(reviewData.tutorId) },
+        //             { $inc: { reviewCount: 1 } }
+        //         );
+
+        //         res.send({
+        //             reviewInserted: reviewResult.insertedId,
+        //             tutorUpdated: tutorUpdateResult.modifiedCount > 0
+        //         });
+        //     } catch (error) {
+        //         res.status(500).send({ error: error.message });
+        //     }
+        // });
+
+        app.get("/tutors/review/:id", async (req, res) => {
             const id = req.params.id;
             const result = await tutorsCollection.updateOne(
                 { _id: new ObjectId(id) },
                 { $inc: { review: 1 } }
             );
+
+            await reviewsCollection.insertOne({});
             res.send(result);
         })
+
+        app.post("/add-review", async (req, res) => {
+            const reviewData = req.body;
+            const result = await reviewsCollection.insertOne(reviewData);
+            res.send(result);
+        });
+
 
         // for stat crud operation
         const db = client.db("online-Tutor");
@@ -194,31 +223,31 @@ async function run() {
         });
 
         // reviews crud
-        app.post("/reviews", async (req, res) => {
-            const result = await reviewsCollection.insertOne(req.body);
-            res.send(result);
-        });
+        // app.post("/reviews", async (req, res) => {
+        //     const result = await reviewsCollection.insertOne(req.body);
+        //     res.send(result);
+        // });
 
-        app.get("/reviews", async (req, res) => {
-            const result = await reviewsCollection.find().toArray();
-            res.send(result);
-        });
+        // app.get("/reviews", async (req, res) => {
+        //     const result = await reviewsCollection.find().toArray();
+        //     res.send(result);
+        // });
 
-        app.put("/reviews/:id", async (req, res) => {
-            const id = req.params.id;
-            const updatedReview = req.body;
-            const result = await reviewsCollection.updateOne(
-                { _id: new ObjectId(id) },
-                { $set: updatedReview }
-            );
-            res.send(result);
-        });
+        // app.put("/reviews/:id", async (req, res) => {
+        //     const id = req.params.id;
+        //     const updatedReview = req.body;
+        //     const result = await reviewsCollection.updateOne(
+        //         { _id: new ObjectId(id) },
+        //         { $set: updatedReview }
+        //     );
+        //     res.send(result);
+        // });
 
-        app.delete("/reviews/:id", async (req, res) => {
-            const id = req.params.id;
-            const result = await reviewsCollection.deleteOne({ _id: new ObjectId(id) });
-            res.send(result);
-        });
+        // app.delete("/reviews/:id", async (req, res) => {
+        //     const id = req.params.id;
+        //     const result = await reviewsCollection.deleteOne({ _id: new ObjectId(id) });
+        //     res.send(result);
+        // });
 
         // languages crud
         app.post("/languages", async (req, res) => {
